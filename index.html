@@ -1,0 +1,95 @@
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<script src="ball.js"></script>
+<body>
+  <script>
+    // This is a random walk.
+    // use "factory" to make any number of balls
+    // use update to start random walkers
+    // Also "mousedown" will create a ball
+
+    const size = 30;
+    const x = [];
+    const y = [];
+    const velocity_x = [];
+    const velocity_y = [];
+    const balls = [];
+    let speed = 0;
+    let xmouse, ymouse;
+    let totalFactoryOutput = 0;
+    // To track ball we create a new ball every time it is moved.
+    // The position of the old ball is used as base for new position
+    // However this won't quite work if we call factory multiple times
+    // creating different numbers of balls.
+    // Can you make it work more generally?
+    
+	//ditects the edge so the balls stay in frame.
+    function checkWalls(i) {
+      if (x[i] < 0) velocity_x[i] = -velocity_x[i];
+      if (x[i] + size > 800) {
+        velocity_x[i] = -velocity_x[i];
+        x[i] = 800 - size;
+      }
+      if (y[i] + size > 400) {
+        velocity_y[i] = -velocity_y[i];
+        y[i] = 400 - size;
+      } else if (y[i] < 0) {
+        y[i] = 0;
+        velocity_y[i] = -velocity_y[i];
+      }
+    }
+	//moves the balls
+    function update() {
+      let nballs = balls.length;
+      // total length of this array
+      // we need to start at totalFactorOutput from the end
+      let focus = nballs - totalFactoryOutput;
+      for (let i = focus; i < nballs; i++) {
+        x[i] += Math.random() * 20 - 10 + speed;
+        y[i] += Math.random() * 20 - 10;
+        checkWalls(i)
+        makeBall(x[i], y[i], balls[i].style.backgroundColor);
+      }
+     
+      // change the speed of the update, if you want to paint faster
+
+      setTimeout(update, 200); // this calls update ever 1/10 second
+    }
+    // Can you update this so we can paint with more colors?
+    function randomColor() {
+      const colors = ["red", "green", "blue", "yellow", "gray", "black", "white"];
+      return colors[Math.floor(Math.random() * 8 )];
+    }
+	//makes balls of random color
+    function factory(total) {
+      let start = 300;
+      for (let i = 0; i < total; i++) {
+        makeBall(start, start, randomColor());
+      }
+      totalFactoryOutput += total;
+    }
+	// function that listens to mousedown event.
+    var mouse = function (e) {
+      ymouse = e.clientY;
+      xmouse = e.clientX;
+      makeBall(xmouse, ymouse, randomColor());
+      totalFactoryOutput++; // one more made
+    };
+    if (window.addEventListener) {
+      document.addEventListener("mousedown", mouse, false);
+    }
+  </script>
+  <div class="svg-container">
+    <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <rect
+        x="0"
+        y="0"
+        width="800"
+        height="400"
+        stroke="purple"
+        fill="transparent"
+        stroke-width="5"
+      />
+    </svg>
+  </div>
+	<div> <p>To start make balls with mouse 1 than type in update() in the console.</p>
+</body>
