@@ -4,3 +4,4 @@
 <p>Roadmap: This exersise the thing I would improve on is to confine the mause click event to just the purple rectangle.
 Furthermore if I have more time to work on this I will place the instructions in a nicer location.</p>
 #MIT License.
+Copyright (c) 2020 John Williams
